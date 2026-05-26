@@ -1,4 +1,76 @@
-﻿// Mobile navigation toggle for small screens.
+// Shared project data for homepage previews and the portfolio page.
+const projects = [
+  {
+    id: "quicksand-gym",
+    name: "Quicksand Gym",
+    category: "لوحات خارجية",
+    imageCount: 13,
+    image: "images/Quicksand gym/Quicksand gym 1-thumb.webp",
+    imageWidth: 800,
+    imageHeight: 1000,
+    featured: true,
+    detailUrl: "project-detail.html?id=quicksand-gym"
+  },
+  {
+    id: "seven",
+    name: "Seven",
+    category: "واجهات",
+    imageCount: 5,
+    image: "images/Seven/Seven 1-thumb.webp",
+    imageWidth: 800,
+    imageHeight: 1000,
+    featured: true,
+    detailUrl: "project-detail.html?id=seven"
+  },
+  {
+    id: "logo-branding",
+    name: "Logo / Branding",
+    category: "هوية بصرية",
+    imageCount: 2,
+    image: "images/LOGO/Uram PP-thumb.webp",
+    imageWidth: 800,
+    imageHeight: 800,
+    featured: true,
+    detailUrl: "project-detail.html?id=logo-branding"
+  }
+];
+
+const createProjectCard = (project, options = {}) => {
+  const cardClass = options.cardClass || "project-card";
+  const buttonText = options.buttonText || "عرض المشروع ←";
+  const imageWidth = options.imageWidth || project.imageWidth || 800;
+  const imageHeight = options.imageHeight || project.imageHeight || 800;
+  const card = document.createElement("article");
+
+  card.className = cardClass;
+  card.dataset.category = project.category;
+  card.innerHTML = `
+    <a href="${project.detailUrl}" aria-label="عرض مشروع ${project.name}">
+      <span class="${cardClass}__media">
+        <img
+          src="${project.image}"
+          alt="${project.name}"
+          loading="lazy"
+          decoding="async"
+          width="${imageWidth}"
+          height="${imageHeight}"
+        />
+      </span>
+      <span class="${cardClass}__content">
+        <span class="${cardClass}__meta">
+          <span>${project.category}</span>
+          <span>صور ${project.imageCount}</span>
+        </span>
+        <strong>${project.name}</strong>
+        <span class="${cardClass}__button">${buttonText}</span>
+      </span>
+    </a>
+  `;
+
+  return card;
+};
+
+// Mobile navigation toggle for small screens.
 const menuToggle = document.querySelector(".menu-toggle");
 const mainNav = document.querySelector(".main-nav");
 
@@ -20,11 +92,24 @@ if (menuToggle && mainNav) {
   });
 }
 
-// Smooth navbar scrolling and active-section state.
+// Header compact state.
+(() => {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+
+  const updateHeader = () => {
+    header.classList.toggle("is-scrolled", window.scrollY > 16);
+  };
+
+  window.addEventListener("scroll", updateHeader, { passive: true });
+  updateHeader();
+})();
+
+// Smooth navbar scrolling and active-section state for same-page anchors.
 (() => {
   const navLinks = Array.from(document.querySelectorAll('.main-nav a[href^="#"]'));
   const logoLink = document.querySelector('.site-header .brand-logo[href^="#"]');
-  const sectionIds = ["home", "services", "portfolio", "about", "contact"];
+  const sectionIds = ["home", "services", "about", "contact"];
   const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
 
   if (!navLinks.length || !sections.length) return;
@@ -97,233 +182,85 @@ if (menuToggle && mainNav) {
   }
 })();
 
-// Folder-based portfolio gallery.
+// Render selected works on the homepage.
 (() => {
-  const projects = [
-    {
-      id: "quicksand",
-      title: "Quicksand Gym",
-      category: "لوحات خارجية وحروف بارزة",
-      description: "تنفيذ واجهة بصرية متكاملة بتفاصيل ثلاثية الأبعاد وحضور واضح.",
-      images: [
-        "images/Quicksand gym/Quicksand gym 1.png",
-        "images/Quicksand gym/Quicksand gym 2.png",
-        "images/Quicksand gym/Quicksand gym 3.png",
-        "images/Quicksand gym/Quicksand gym 4.png",
-        "images/Quicksand gym/Quicksand gym 5.png",
-        "images/Quicksand gym/Quicksand gym 6.png",
-        "images/Quicksand gym/Quicksand gym 7.png",
-        "images/Quicksand gym/Quicksand gym 8.png",
-        "images/Quicksand gym/Quicksand gym 9.png",
-        "images/Quicksand gym/Quicksand gym 9_1.png",
-        "images/Quicksand gym/Quicksand gym 10.png",
-        "images/Quicksand gym/Quicksand gym 11.png",
-        "images/Quicksand gym/Quicksand gym CTA.png"
-      ]
-    },
-    {
-      id: "seven",
-      title: "Seven",
-      category: "لوحات وهوية واجهات",
-      description: "تطبيق هوية بصرية على واجهة تجارية بأسلوب واضح واحترافي.",
-      images: [
-        "images/Seven/Seven 1.png",
-        "images/Seven/Seven 2.png",
-        "images/Seven/Seven 3.png",
-        "images/Seven/Seven 4.png",
-        "images/Seven/Seven CTA.png"
-      ]
-    },
-    {
-      id: "logo",
-      title: "Logo / Branding",
-      category: "هوية بصرية",
-      description: "تصميم وتطبيق عناصر الهوية البصرية بأسلوب متناسق.",
-      images: [
-        "images/LOGO/Uram PP.png",
-        "images/LOGO/Uram PP 2.png"
-      ]
-    }
-  ];
+  const selectedWorks = document.querySelector("[data-selected-works]");
+  if (!selectedWorks) return;
 
-  const featuredImage = document.querySelector(".featured-project-image");
-  const overlay = document.querySelector(".featured-project-overlay");
-  const featuredCategory = document.querySelector(".featured-project-category");
-  const featuredTitle = document.querySelector(".featured-project-title");
-  const featuredDescription = document.querySelector(".featured-project-description");
-  const featuredInfo = document.querySelector(".featured-project-info");
-  const imageCounter = document.querySelector("[data-project-counter]");
-  const previousImageButton = document.querySelector("[data-project-prev]");
-  const nextImageButton = document.querySelector("[data-project-next]");
-  const projectList = document.querySelector("[data-project-list]");
-  const thumbnailList = document.querySelector("[data-project-thumbnails]");
-  const stripPreviousButton = document.querySelector("[data-strip-prev]");
-  const stripNextButton = document.querySelector("[data-strip-next]");
+  const fragment = document.createDocumentFragment();
+  projects
+    .filter((project) => project.featured)
+    .slice(0, 3)
+    .forEach((project) => {
+      fragment.append(createProjectCard(project, {
+        cardClass: "selected-work-card",
+        buttonText: "عرض المشروع ←"
+      }));
+    });
 
-  if (!featuredImage || !overlay || !featuredCategory || !featuredTitle || !featuredDescription || !featuredInfo || !imageCounter || !previousImageButton || !nextImageButton || !projectList || !thumbnailList || !stripPreviousButton || !stripNextButton) return;
+  selectedWorks.append(fragment);
+})();
 
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let isSwitching = false;
-  let activeProjectIndex = 0;
-  let activeImageIndex = 0;
-  const formatCounter = (imageIndex, totalImages) => `${String(imageIndex + 1).padStart(2, "0")} / ${String(totalImages).padStart(2, "0")}`;
-  const getActiveProject = () => projects[activeProjectIndex];
+// Render and filter the dedicated portfolio page.
+(() => {
+  const grid = document.querySelector("[data-projects-grid]");
+  const filterBar = document.querySelector(".filter-bar");
+  const filterButtons = Array.from(document.querySelectorAll("[data-filter]"));
 
-  const getImageLabel = (project, imageIndex) => `${project.title} - صورة ${imageIndex + 1}`;
+  if (!grid || !filterButtons.length) return;
 
-  const setFeaturedImage = (project, imageIndex) => {
-    activeImageIndex = imageIndex;
-    featuredImage.src = project.images[imageIndex];
-    featuredImage.alt = getImageLabel(project, imageIndex);
-    featuredCategory.textContent = project.category;
-    featuredTitle.textContent = project.title;
-    featuredDescription.textContent = project.description;
-    imageCounter.textContent = formatCounter(imageIndex, project.images.length);
-  };
+  const fragment = document.createDocumentFragment();
+  projects.forEach((project) => {
+    fragment.append(createProjectCard(project));
+  });
+  grid.append(fragment);
 
-  const updateActiveThumbnail = () => {
-    thumbnailList.querySelectorAll(".project-thumb").forEach((thumb, index) => {
-      thumb.classList.toggle("is-active", index === activeImageIndex);
-      thumb.setAttribute("aria-pressed", String(index === activeImageIndex));
-      if (index === activeImageIndex) {
-        thumb.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", inline: "nearest", block: "nearest" });
+  const cards = Array.from(grid.querySelectorAll(".project-card"));
+
+  const setFilter = (filter) => {
+    filterButtons.forEach((button) => {
+      const isActive = button.dataset.filter === filter;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+
+    cards.forEach((card) => {
+      const isVisible = filter === "الكل" || card.dataset.category === filter;
+
+      if (card.hideTimer) {
+        window.clearTimeout(card.hideTimer);
+      }
+
+      if (isVisible) {
+        card.hidden = false;
+        card.setAttribute("aria-hidden", "false");
+        requestAnimationFrame(() => {
+          card.classList.remove("is-hiding");
+        });
+      } else {
+        card.classList.add("is-hiding");
+        card.setAttribute("aria-hidden", "true");
+        card.hideTimer = window.setTimeout(() => {
+          card.hidden = true;
+        }, 260);
       }
     });
   };
 
-  const switchFeaturedImage = (project, imageIndex) => {
-    if (isSwitching || imageIndex === activeImageIndex) return;
-    isSwitching = true;
-
-    if (reducedMotion) {
-      setFeaturedImage(project, imageIndex);
-      updateActiveThumbnail();
-      isSwitching = false;
-      return;
-    }
-
-    featuredImage.classList.add("is-switching");
-    overlay.classList.add("is-switching");
-    featuredInfo.classList.add("is-switching");
-
-    setTimeout(() => {
-      setFeaturedImage(project, imageIndex);
-      updateActiveThumbnail();
-
-      requestAnimationFrame(() => {
-        featuredImage.classList.remove("is-switching");
-        overlay.classList.remove("is-switching");
-        featuredInfo.classList.remove("is-switching");
-        setTimeout(() => { isSwitching = false; }, 500);
-      });
-    }, 360);
-  };
-
-  const stepImage = (direction) => {
-    const project = getActiveProject();
-    const nextIndex = (activeImageIndex + direction + project.images.length) % project.images.length;
-    switchFeaturedImage(project, nextIndex);
-  };
-
-  const renderThumbnails = (project) => {
-    thumbnailList.innerHTML = "";
-
-    project.images.forEach((image, imageIndex) => {
-      const button = document.createElement("button");
-      button.className = "project-thumb";
-      button.type = "button";
-      button.setAttribute("aria-label", getImageLabel(project, imageIndex));
-      button.setAttribute("aria-pressed", String(imageIndex === activeImageIndex));
-
-      const img = document.createElement("img");
-      img.src = image;
-      img.alt = "";
-      img.loading = imageIndex > 3 ? "lazy" : "eager";
-      button.append(img);
-      button.classList.toggle("is-active", imageIndex === activeImageIndex);
-
-      button.addEventListener("click", () => {
-        switchFeaturedImage(project, imageIndex);
-      });
-
-      thumbnailList.append(button);
-    });
-  };
-
-  const updateActiveProject = () => {
-    projectList.querySelectorAll(".project-folder").forEach((button, index) => {
-      button.classList.toggle("is-active", index === activeProjectIndex);
-      button.setAttribute("aria-pressed", String(index === activeProjectIndex));
-    });
-  };
-
-  const renderProject = (projectIndex) => {
-    if (isSwitching || projectIndex === activeProjectIndex) return;
-    const project = projects[projectIndex];
-    activeProjectIndex = projectIndex;
-    activeImageIndex = 0;
-    updateActiveProject();
-
-    if (reducedMotion) {
-      setFeaturedImage(project, 0);
-      renderThumbnails(project);
-      return;
-    }
-
-    isSwitching = true;
-    featuredImage.classList.add("is-switching");
-    overlay.classList.add("is-switching");
-    featuredInfo.classList.add("is-switching");
-
-    setTimeout(() => {
-      setFeaturedImage(project, 0);
-      renderThumbnails(project);
-
-      requestAnimationFrame(() => {
-        featuredImage.classList.remove("is-switching");
-        overlay.classList.remove("is-switching");
-        featuredInfo.classList.remove("is-switching");
-        setTimeout(() => { isSwitching = false; }, 500);
-      });
-    }, 360);
-  };
-
-  projects.forEach((project, projectIndex) => {
-    const button = document.createElement("button");
-    button.className = "project-folder";
-    button.type = "button";
-    button.setAttribute("aria-pressed", String(projectIndex === activeProjectIndex));
-
-    const title = document.createElement("strong");
-    const category = document.createElement("small");
-    const count = document.createElement("span");
-
-    title.textContent = project.title;
-    category.textContent = project.category;
-    count.textContent = `${project.images.length} صور`;
-    button.append(title, category, count);
-    button.classList.toggle("is-active", projectIndex === activeProjectIndex);
-
-    button.addEventListener("click", () => {
-      renderProject(projectIndex);
-    });
-
-    projectList.append(button);
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => setFilter(button.dataset.filter));
   });
 
-  setFeaturedImage(projects[0], 0);
-  renderThumbnails(projects[0]);
+  if (filterBar) {
+    const updateFilterShadow = () => {
+      filterBar.classList.toggle("is-stuck", window.scrollY > 120);
+    };
 
-  previousImageButton.addEventListener("click", () => stepImage(-1));
-  nextImageButton.addEventListener("click", () => stepImage(1));
+    window.addEventListener("scroll", updateFilterShadow, { passive: true });
+    updateFilterShadow();
+  }
 
-  stripPreviousButton.addEventListener("click", () => {
-    thumbnailList.scrollBy({ left: -thumbnailList.clientWidth * 0.6, behavior: reducedMotion ? "auto" : "smooth" });
-  });
-
-  stripNextButton.addEventListener("click", () => {
-    thumbnailList.scrollBy({ left: thumbnailList.clientWidth * 0.6, behavior: reducedMotion ? "auto" : "smooth" });
-  });
+  setFilter("الكل");
 })();
 
 // Scroll-triggered staggered reveal for service cards.

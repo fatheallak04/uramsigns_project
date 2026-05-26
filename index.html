@@ -31,7 +31,7 @@
 
       <nav class="main-nav" aria-label="روابط الموقع الرئيسية">
         <a href="#services">الخدمات</a>
-        <a href="#portfolio">الأعمال</a>
+        <a href="portfolio.html">الأعمال</a>
         <a href="#about">من نحن</a>
         <a class="nav-cta" href="#contact">تواصل معنا</a>
       </nav>
@@ -65,12 +65,18 @@
         </div>
 
         <div class="hero-visual">
-          <div class="hero-card" aria-label="صورة توضيحية لأعمال اللوحات والطباعة">
+          <picture class="hero-brand-visual" aria-label="هوية URAM Signs البصرية">
+            <source srcset="images/uram-hero-visual.webp" type="image/webp" />
             <img
-              src="images/Quicksand_gym_4.png"
-              alt="واجهة مشروع Quicksand Gym — حروف ثلاثية الأبعاد ولوحة إعلانية مضيئة"
+              src="images/uram-hero-visual.png"
+              alt="URAM Signs illuminated signage visual"
+              width="1448"
+              height="1086"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
             />
-          </div>
+          </picture>
 
           <div class="process-badges" aria-label="مراحل العمل الرئيسية">
             <span><strong>01</strong> تصميم</span>
@@ -142,47 +148,23 @@
       </div>
     </section>
 
-    <!-- Portfolio: cinematic stage layout with interactive featured project. -->
-    <section class="portfolio-section" id="portfolio" aria-labelledby="portfolio-title">
+    <!-- Selected works: lightweight preview linking to the dedicated portfolio page. -->
+    <section class="selected-works" aria-labelledby="selected-works-title">
       <div class="container">
-        <div class="section-heading portfolio-heading">
+        <div class="section-heading selected-works__heading">
+          <span class="gold-divider" aria-hidden="true"></span>
           <p class="section-kicker">أعمالنا</p>
-          <h2 id="portfolio-title">أعمالنا تتحدث عنّا</h2>
+          <h2 id="selected-works-title">أعمال مختارة</h2>
           <p>
-            مشاريع منفّذة بدقة احترافية تعكس قوة الهوية البصرية لعملائنا
+            اكتشف بعضاً من مشاريعنا التي تعكس الدقة والاحترافية
           </p>
         </div>
 
-        <div class="portfolio-stage">
-          <aside class="portfolio-projects" aria-label="قائمة المشاريع">
-            <div class="project-list" data-project-list></div>
-          </aside>
+        <div class="selected-works-grid" data-selected-works aria-label="أعمال مختارة من مشاريعنا">
+        </div>
 
-          <div class="portfolio-gallery">
-            <article class="featured-project" aria-live="polite">
-              <img
-                class="featured-project-image"
-                src="images/Quicksand gym/Quicksand gym 1.png"
-                alt="Quicksand Gym"
-              />
-              <div class="featured-project-overlay" aria-hidden="true"></div>
-              <span class="featured-project-counter" data-project-counter>01 / 13</span>
-              <button class="featured-project-nav featured-project-nav--prev" type="button" data-project-prev aria-label="الصورة السابقة">‹</button>
-              <button class="featured-project-nav featured-project-nav--next" type="button" data-project-next aria-label="الصورة التالية">›</button>
-            </article>
-
-            <div class="featured-project-info" aria-live="polite">
-              <p class="featured-project-category">لوحات خارجية وحروف بارزة</p>
-              <h3 class="featured-project-title">Quicksand Gym</h3>
-              <p class="featured-project-description">تنفيذ واجهة بصرية متكاملة بتفاصيل ثلاثية الأبعاد وحضور واضح.</p>
-            </div>
-
-            <div class="project-thumbnail-shell">
-              <button class="project-strip-control project-strip-control--prev" type="button" data-strip-prev aria-label="تمرير الصور للخلف">‹</button>
-              <div class="project-thumbnails" data-project-thumbnails aria-label="صور المشروع"></div>
-              <button class="project-strip-control project-strip-control--next" type="button" data-strip-next aria-label="تمرير الصور للأمام">›</button>
-            </div>
-          </div>
+        <div class="selected-works__actions">
+          <a class="btn btn-secondary" href="portfolio.html">شاهد جميع الأعمال ←</a>
         </div>
       </div>
     </section>
@@ -368,7 +350,7 @@
         <h2>QUICK LINKS</h2>
         <a href="#home"><span>الرئيسية</span><i aria-hidden="true"></i></a>
         <a href="#services"><span>الخدمات</span><i aria-hidden="true"></i></a>
-        <a href="#portfolio"><span>أعمالنا</span><i aria-hidden="true"></i></a>
+        <a href="portfolio.html"><span>أعمالنا</span><i aria-hidden="true"></i></a>
         <a href="#about"><span>من نحن</span><i aria-hidden="true"></i></a>
         <a href="#clients"><span>عملاؤنا</span><i aria-hidden="true"></i></a>
         <a href="#contact"><span>تواصل معنا</span><i aria-hidden="true"></i></a>
